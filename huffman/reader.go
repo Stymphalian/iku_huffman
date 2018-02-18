@@ -3,15 +3,21 @@ package huffman
 import (
 	"fmt"
 	"io"
+
+	"github.com/Stymphalian/iku_bits/bitreader"
 )
 
 type Reader struct {
-	r *BitReader
+	r bitreader.Interface
 	m *Model
 }
 
 func NewReader(r io.Reader, m *Model) (*Reader, error) {
-	return &Reader{NewBitReader(r), m}, nil
+	b, err := bitreader.NewBitReader(r)
+	if err != nil {
+		return nil, err
+	}
+	return &Reader{b, m}, nil
 }
 
 func (this *Reader) Read(p []byte) (int, error) {

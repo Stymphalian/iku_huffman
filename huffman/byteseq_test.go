@@ -44,7 +44,7 @@ func TestByteSeqString(t *testing.T) {
 
 func TestByteSeqWriter_WriteSimple(t *testing.T) {
 	dest := bytes.NewBuffer([]byte{})
-	w := &ByteSeqWriter{dest, 0, 0}
+	w := NewByteSeqWriter(dest)
 
 	w.Write(ByteSeq{0x02, 2})
 	w.Write(ByteSeq{0x02, 2})
@@ -64,7 +64,7 @@ func TestByteSeqWriter_WriteSimple(t *testing.T) {
 
 func TestByteSeqWriter_WriteFlush(t *testing.T) {
 	dest := bytes.NewBuffer([]byte{})
-	w := &ByteSeqWriter{dest, 0, 0}
+	w := NewByteSeqWriter(dest)
 
 	// Write out the sequence, but because it is only 13 bits we will have
 	// 5 bits to carry over
@@ -79,12 +79,6 @@ func TestByteSeqWriter_WriteFlush(t *testing.T) {
 	}
 	if bytes.Compare(dest.Bytes(), []byte{0xf0}) != 0 {
 		t.Errorf("Did not get all bytes %#v", dest.Bytes())
-	}
-	if w.carry != 0xb0 {
-		t.Errorf("Did not get expected carry %#v,%d", w.carry, w.carryN)
-	}
-	if w.carryN != 5 {
-		t.Errorf("Want expecting 5 bits to be put into the carry but got %d", w.carryN)
 	}
 	if seq.Pattern != 0x1e16 || seq.Len != 13 {
 		t.Error("Calling Write should not mutate the seq")
@@ -104,9 +98,6 @@ func TestByteSeqWriter_WriteFlush(t *testing.T) {
 	if bytes.Compare(dest.Bytes(), []byte{0xf0}) != 0 {
 		t.Errorf("2: Did not get all bytes %#v", dest.Bytes())
 	}
-	if w.carry != 0xb6 || w.carryN != 7 {
-		t.Errorf("2: Did not get expected carry %#v,%d", w.carry, w.carryN)
-	}
 
 	// Write a 3rd sequence, take one bit to finish the carry then write out the
 	// remainder of the sequence.
@@ -122,9 +113,6 @@ func TestByteSeqWriter_WriteFlush(t *testing.T) {
 	if bytes.Compare(dest.Bytes(), []byte{0xf0, 0xb7, 0x3f}) != 0 {
 		t.Errorf("3: Did not get all bytes %#v", dest.Bytes())
 	}
-	if w.carry != 0x80 || w.carryN != 1 {
-		t.Errorf("3: Did not get expected carry %#v,%d", w.carry, w.carryN)
-	}
 
 	// Flush the stream to get the last byte
 	n, err = w.Flush()
@@ -134,37 +122,34 @@ func TestByteSeqWriter_WriteFlush(t *testing.T) {
 	if n != 1 {
 		t.Error("4. Flush did not report the correct number of bits left")
 	}
-	if w.carry != 0x00 || w.carryN != 0 {
-		t.Errorf("4: Did not get expected carry %#v,%d", w.carry, w.carryN)
-	}
 	// 1111 0000 1011 0111 0011 1111 1
 	if bytes.Compare(dest.Bytes(), []byte{0xf0, 0xb7, 0x3f, 0x80}) != 0 {
 		t.Errorf("3: Did not get all bytes %#v", dest.Bytes())
 	}
 }
 
-func TestReadBits(t *testing.T) {
-	var pattern uint64 = 0x51de
-	var len uint = 15
+// func TestReadBits(t *testing.T) {
+// 	var pattern uint64 = 0x51de
+// 	var len uint = 15
 
-	nBits, bits := readBits(pattern, len, 3)
-	if nBits != 3 {
-		t.Fail()
-	}
-	if bits != 0x05 {
-		t.Fail()
-	}
-}
+// 	nBits, bits := readBits(pattern, len, 3)
+// 	if nBits != 3 {
+// 		t.Fail()
+// 	}
+// 	if bits != 0x05 {
+// 		t.Fail()
+// 	}
+// }
 
-func TestReadBitsNotEnough(t *testing.T) {
-	var pattern uint64 = 0x05
-	var len uint = 3
+// func TestReadBitsNotEnough(t *testing.T) {
+// 	var pattern uint64 = 0x05
+// 	var len uint = 3
 
-	nBits, bits := readBits(pattern, len, 8)
-	if nBits != 3 {
-		t.Fail()
-	}
-	if bits != 0x05 {
-		t.Fail()
-	}
-}
+// 	nBits, bits := readBits(pattern, len, 8)
+// 	if nBits != 3 {
+// 		t.Fail()
+// 	}
+// 	if bits != 0x05 {
+// 		t.Fail()
+// 	}
+// }

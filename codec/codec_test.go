@@ -2,9 +2,9 @@ package codec
 
 import (
 	"bytes"
-	"fmt"
 	"io/ioutil"
 	"log"
+	"os"
 	"testing"
 )
 
@@ -13,8 +13,7 @@ func TestCodec_Simple(t *testing.T) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	// defer os.Remove(tmpfile.Name())
-	fmt.Println(tmpfile.Name())
+	defer os.Remove(tmpfile.Name())
 
 	src := []byte("hello world")
 	encoder, err := NewEncoder(tmpfile)

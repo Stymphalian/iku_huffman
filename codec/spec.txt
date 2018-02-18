@@ -20,9 +20,10 @@ Encoded Format
 
 Version: 16 bits -  Version number used in this encoding.
 
-Flags: 16 bits - FLAGS used telling you information about the encoded packet.
+Flags: 16 bits - FLAGS telling you information about the encoded packet.
   0x0001 (1) HAS_MODEL  -
-     A flag to tell you that the HuffmanTree/model is also stored in the packet.
+     Informs us that the HuffmanTree codebook in canonical form is stored in
+     the packet.
 
 PaylaodLen - 64 bits - Represents an uint64 encoded in LittleEndian which tells
   us how long in BYTES the original unencoded data source was.
