@@ -1,0 +1,59 @@
+Huffman encoded packet format.
+This huffman encoding format strictly encodes the full ASCII character set.
+
+
+Encoded Format
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|    Version                  |               FLAGS             |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                        PayloadLen                             |
+|                        (64 bits)                              |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                     HuffmanTree (Optional)                    |
+|                         255 bytes                             |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                     Payload (8 bit aligned)                   |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+
+Version: 16 bits -  Version number used in this encoding.
+
+Flags: 16 bits - FLAGS used telling you information about the encoded packet.
+  0x0001 (1) HAS_MODEL  -
+     A flag to tell you that the HuffmanTree/model is also stored in the packet.
+
+PaylaodLen - 64 bits - Represents an uint64 encoded in LittleEndian which tells
+  us how long in BYTES the original unencoded data source was.
+
+HuffmanTree: (128 x 8 bits) A canonical huffman encoded model of the ASCII 
+  character set. Each byte corresponds to the length of the symbols encoding
+  when the alphabet is sorted (sort order is 0 --> 128).
+  OPTIONAL - Only filled if the HAS_MODEL flag is set.
+  0             8 bits 
+  0 1 2 3 4 5 6 7
+  +-+-+-+-+-+-+-+
+  |    0x00     |
+  +-+-+-+-+-+-+-+
+  |    0x01     |
+  +-+-+-+-+-+-+-+
+  |    ...      |
+  +-+-+-+-+-+-+-+
+  |    'a'      |
+  +-+-+-+-+-+-+-+
+  |    ...      |
+  +-+-+-+-+-+-+-+
+  |    0xdf     |
+  +-+-+-+-+-+-+-+
+
+Payload: PayLoadLen * 8 bits - The encoded data byte aligned. 
+  There are 'PayLoadLen' BYTES of data in the payload, where the last BYTE will
+  only contain 'Remainder' number of bits. 
+
+
+
+  
+  
+
+

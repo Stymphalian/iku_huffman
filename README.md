@@ -1,0 +1,2 @@
+## Go Library - Huffman Encoding
+
