@@ -49,13 +49,13 @@ func TestModel_TestSort(t *testing.T) {
 		t.Errorf("Failed to create a basic model from the text")
 	}
 
-	ps := make(SymbolByteSeqPairNameLenSort, 0)
+	ps := make(symbolByteSeqPairNameLenSort, 0)
 	for k, v := range m.patternDict {
-		ps = append(ps, SymbolByteSeqPair{k, v})
+		ps = append(ps, symbolByteSeqPair{k, v})
 	}
 
 	sort.Stable(ps)
-	sort.Stable(SymbolByteSeqPairLenNameSort(ps))
+	sort.Stable(symbolByteSeqPairLenNameSort(ps))
 }
 
 func TestModel_MarhsalBinary(t *testing.T) {

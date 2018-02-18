@@ -75,10 +75,9 @@ func (this *Model) Reset(freqDict map[byte]*Freq) error {
 
 func (this *Model) String() string {
 	// we want it to appear in sorted order (first by len, the by symbol order)
-	ps := make(SymbolByteSeqPairLenNameSort, 0)
-	// ps := make(SymbolByteSeqPairNameLenSort, 0)
+	ps := make(symbolByteSeqPairLenNameSort, 0)
 	for k, v := range this.patternDict {
-		ps = append(ps, SymbolByteSeqPair{k, v})
+		ps = append(ps, symbolByteSeqPair{k, v})
 	}
 	sort.Stable(ps)
 
@@ -98,23 +97,6 @@ func (this *Model) GetPattern(symbol byte) (ByteSeq, error) {
 	return s, nil
 }
 
-// func (this *Model) GetEntropyOfText(src string) (float64, error) {
-// 	uniqueChars := make(map[byte]bool)
-// 	for _, v := range []byte(src) {
-// 		uniqueChars[v] = true
-// 	}
-// 	sum := float64(0.0)
-// 	for b, _ := range uniqueChars {
-// 		freq, ok := this.freqDict[b]
-// 		if !ok {
-// 			return 0, errors.New(fmt.Sprintf("Found symbol %v in src text but "+
-// 				"symbol is available in the model's alphabet", b))
-// 		}
-// 		sum += -freq.Freq * math.Log2(freq.Freq)
-// 	}
-// 	return sum, nil
-// }
-
 // Write out the canonical versin of this model
 // 1. Sort by the alphabet
 // 2. Sort by the length of the pattern
@@ -123,9 +105,9 @@ func (this *Model) MarshalBinary() ([]byte, error) {
 	buf := bytes.NewBuffer([]byte{})
 
 	// 1,2 sort the model
-	ps := make(SymbolByteSeqPairNameLenSort, 0)
+	ps := make(symbolByteSeqPairNameLenSort, 0)
 	for k, v := range this.patternDict {
-		ps = append(ps, SymbolByteSeqPair{k, v})
+		ps = append(ps, symbolByteSeqPair{k, v})
 	}
 	sort.Stable(ps)
 

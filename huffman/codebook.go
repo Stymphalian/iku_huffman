@@ -122,9 +122,9 @@ func buildHuffmanTree(dict map[byte]*Freq) (*Node, error) {
 	pq := make(NodePQ, 0)
 	heap.Init(&pq)
 
-	sortedKeys := make(SymbolFreqPairSlice, 0)
+	sortedKeys := make(symbolFreqPairSlice, 0)
 	for k, v := range dict {
-		sortedKeys = append(sortedKeys, SymbolFreqPair{k, *v})
+		sortedKeys = append(sortedKeys, symbolFreqPair{k, *v})
 	}
 	sort.Stable(sortedKeys)
 
@@ -200,9 +200,9 @@ func buildPatternDict(root *Node) (map[byte]ByteSeq, error) {
 // Given a codebook mapping symbol -> length of byte pattern
 // Create a canonical encoding of the codebook
 func canonicalCodebook(codebook map[byte]ByteSeq) (map[byte]ByteSeq, error) {
-	ps := make(SymbolByteSeqPairLenNameSort, 0)
+	ps := make(symbolByteSeqPairLenNameSort, 0)
 	for k, v := range codebook {
-		ps = append(ps, SymbolByteSeqPair{k, v})
+		ps = append(ps, symbolByteSeqPair{k, v})
 	}
 	sort.Stable(ps)
 
@@ -226,9 +226,9 @@ func canonicalCodebook(codebook map[byte]ByteSeq) (map[byte]ByteSeq, error) {
 }
 
 func canonicalHuffmanTree(codebook map[byte]ByteSeq) (*Node, error) {
-	ps := make(SymbolByteSeqPairLenNameSort, 0)
+	ps := make(symbolByteSeqPairLenNameSort, 0)
 	for k, v := range codebook {
-		ps = append(ps, SymbolByteSeqPair{k, v})
+		ps = append(ps, symbolByteSeqPair{k, v})
 	}
 	sort.Stable(ps)
 

@@ -11,59 +11,59 @@ import (
 // forgiveness in iku 2.0. Lets hope they come up something even better than
 // generics.
 
-type SymbolByteSeqPair struct {
+type symbolByteSeqPair struct {
 	symbol  byte
 	byteSeq ByteSeq
 }
-type SymbolByteSeqPairNameLenSort []SymbolByteSeqPair
+type symbolByteSeqPairNameLenSort []symbolByteSeqPair
 
-func (this SymbolByteSeqPairNameLenSort) Len() int {
+func (this symbolByteSeqPairNameLenSort) Len() int {
 	return len(this)
 }
-func (this SymbolByteSeqPairNameLenSort) Less(i int, j int) bool {
+func (this symbolByteSeqPairNameLenSort) Less(i int, j int) bool {
 	if this[i].symbol != this[j].symbol {
 		return this[i].symbol < this[j].symbol
 	} else {
 		return this[i].byteSeq.Len < this[j].byteSeq.Len
 	}
 }
-func (this SymbolByteSeqPairNameLenSort) Swap(i int, j int) {
+func (this symbolByteSeqPairNameLenSort) Swap(i int, j int) {
 	this[i], this[j] = this[j], this[i]
 }
 
-type SymbolByteSeqPairLenNameSort []SymbolByteSeqPair
+type symbolByteSeqPairLenNameSort []symbolByteSeqPair
 
-func (this SymbolByteSeqPairLenNameSort) Len() int {
+func (this symbolByteSeqPairLenNameSort) Len() int {
 	return len(this)
 }
-func (this SymbolByteSeqPairLenNameSort) Less(i int, j int) bool {
+func (this symbolByteSeqPairLenNameSort) Less(i int, j int) bool {
 	if this[i].byteSeq.Len != this[j].byteSeq.Len {
 		return this[i].byteSeq.Len < this[j].byteSeq.Len
 	} else {
 		return this[i].symbol < this[j].symbol
 	}
 }
-func (this SymbolByteSeqPairLenNameSort) Swap(i int, j int) {
+func (this symbolByteSeqPairLenNameSort) Swap(i int, j int) {
 	this[i], this[j] = this[j], this[i]
 }
 
-type SymbolFreqPair struct {
+type symbolFreqPair struct {
 	symbol byte
 	freq   Freq
 }
-type SymbolFreqPairSlice []SymbolFreqPair
+type symbolFreqPairSlice []symbolFreqPair
 
-func (this SymbolFreqPairSlice) Len() int {
+func (this symbolFreqPairSlice) Len() int {
 	return len(this)
 }
-func (this SymbolFreqPairSlice) Less(i int, j int) bool {
+func (this symbolFreqPairSlice) Less(i int, j int) bool {
 	if this[i].freq.Nume == this[j].freq.Nume {
 		return this[i].symbol < this[j].symbol
 	} else {
 		return this[i].freq.Freq < this[j].freq.Freq
 	}
 }
-func (this SymbolFreqPairSlice) Swap(i int, j int) {
+func (this symbolFreqPairSlice) Swap(i int, j int) {
 	this[i], this[j] = this[j], this[i]
 }
 
